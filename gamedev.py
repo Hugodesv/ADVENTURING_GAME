@@ -38,7 +38,7 @@ def display_location(player_location):
     print(f"LOCATION: {player_location.upper()}")
     print("="*50)
     print(current_room['description'])
-   
+
     # Show available exits
     exits = list(current_room['exits'].keys())
     print(f"\nExits: {', '.join(exits)}")
@@ -84,10 +84,9 @@ def display_stats(game_state):
     pass
 
 
-def show_inventory(game_state):
-    # To be implemented
-    pass
-
+def show_inventory(player_inventory):
+    inventory = list(player_inventory)
+    print(f"You're opening you're backpack... {inventory}")
 
 def random_event(game_state):
     # To be implemented
@@ -98,6 +97,7 @@ def use_item(item_name, game_state):
         
         game_state[3].remove(item_name)
         print(f"You used {item_name}... ' You will never forget {item_name} RIP ")
+
 
 def check_lose_condition(game_state):
     # To be implemented
@@ -132,7 +132,7 @@ def process_command(command, game_state):
     elif action == 'use' and len(parts) > 1:
         use_item(parts[1], game_state)
     elif action == 'inventory':
-        print("To be implemented")
+        show_inventory(game_state[3])
     elif action == 'look':
         display_location(game_state[0])
     elif action == 'stats':
