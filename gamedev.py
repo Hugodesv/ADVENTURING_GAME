@@ -55,6 +55,7 @@ def move_player(direction, game_state):
     available_directions = list(current_location_proprieties['exits'].keys())
     if direction in available_directions:
         game_state[0] = current_location_proprieties['exits'][direction]
+        print(f"You're going to the {direction}")
     # To be implemented
 
 
@@ -67,6 +68,8 @@ def take_item(item_name, game_state):
         if item_name in available_items:
             game_state[3].append(item_name)
             current_location_proprieties['items'].remove(item_name)
+            print(f"You're found the AMAAAAAAZINGGG {item_name}")
+
 
 
 # Morning task
@@ -92,9 +95,9 @@ def random_event(game_state):
 
 
 def use_item(item_name, game_state):
-    # To be implemented
-    pass
-
+        
+        game_state[3].remove(item_name)
+        print(f"You used {item_name}... ' You will never forget {item_name} RIP ")
 
 def check_lose_condition(game_state):
     # To be implemented
@@ -127,7 +130,7 @@ def process_command(command, game_state):
     elif action == 'take' and len(parts) > 1:
         take_item(parts[1], game_state)
     elif action == 'use' and len(parts) > 1:
-        print("To be implemented")
+        use_item(parts[1], game_state)
     elif action == 'inventory':
         print("To be implemented")
     elif action == 'look':
