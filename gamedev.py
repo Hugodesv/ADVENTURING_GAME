@@ -3,30 +3,35 @@ import random
 
 # Game world - rooms and their properties
 rooms = {
-    'forest': {
-        'description': 'You are in a dark, mysterious forest. Tall trees surround you.',
-        'exits': {'north': 'cave', 'east': 'village', 'south': 'lake'},
-        'items': ['stick', 'berries']
+    'Beginner river': {
+        'description': 'The river near the Town of the promisings fishermans',
+        'exits': {'north': 'Cave lake', 'east': 'village', 'south': 'lake'},
+        'items': ['Normal Fish ! Continue like that !', 'Nothing... try again','A rock... Useless','Normal Fish ! Continue like that !', 'Nothing... try again','A rock... Useless','A old paper with "Hidden in the south..." ']
     },
-    'cave': {
-        'description': 'A damp cave with glowing crystals on the walls. You hear water dripping.',
-        'exits': {'south': 'forest', 'east': 'mountain'},
-        'items': ['torch', 'gold_coin']
+    'Cave lake': {
+        'description': 'A cave with a lake inside , you feel a mysterious athmosphere ',
+        'exits': {'south': 'Beginner river', 'east': 'Sacred River of the Moutain'},
+        'items': ['Nothing... try again', 'Golden shining coin ! Congratulation you are rich from now !','Nothing... try again','Nothing... try again','Nothing... try again','Nothing... try again']
     },
-    'village': {
-        'description': 'A small, peaceful village with cozy houses and friendly people.',
-        'exits': {'west': 'forest', 'north': 'mountain'},
+    'Village swimming pool': {
+        'description': 'The swimming pool of the vilage',
+        'exits': {'west': 'Beginner river', 'north': 'Sacred River of the Moutain'},
         'items': ['bread', 'map']
     },
-    'mountain': {
+    'Sacred River of the Moutain': {
         'description': 'You stand atop a high mountain. The view is breathtaking!',
-        'exits': {'west': 'cave', 'south': 'village'},
+        'exits': {'west': 'Cave Lake', 'south': 'village'},
         'items': ['treasure_chest']
     },
     'lake': {
         'description': 'A serene lake with crystal-clear water. Fish swim peacefully below.',
-        'exits': {'north': 'forest'},
+        'exits': {'north': 'Beginner river','hidden': 'Legendary Water Well'}, 
         'items': ['fishing_rod', 'fish']
+    },
+    'Legendary Water Well': {
+        'description': '... The fishing road in your hands begin to shine... You are the chosen one ',
+        'exits': {'north': 'Beginner river','south': 'Beginner river','west': 'Beginner river','east':'Beginner river'},
+        'items': ['Golden shining Fish You feel the power of the Legendary FISHING ROAD', 'Diamond of wisdom the most expensive object of all times','Treasure Chest you finished the game you are the GOAT of all fishermans']
     }
 }
 
@@ -42,10 +47,7 @@ def display_location(player_location):
     # Show available exits
     exits = list(current_room['exits'].keys())
     print(f"\nExits: {', '.join(exits)}")
-   
-    # Show items in room
-    if current_room['items']:
-        print(f"You can see: {', '.join(current_room['items'])}")
+
    
 # Morning task
 def move_player(direction, game_state):
@@ -60,22 +62,28 @@ def move_player(direction, game_state):
 
 
 # Morning task
-def take_item(item_name, game_state):
+def fishing(game_state):
     # game_state = [player_location, player_health, player_score, player_inventory, game_quit]
         current_location = game_state[0]
         current_location_proprieties = rooms[current_location]
         available_items = current_location_proprieties['items']
-        if item_name in available_items:
-            game_state[3].append(item_name)
-            current_location_proprieties['items'].remove(item_name)
-            print(f"You're found the AMAAAAAAZINGGG {item_name}")
+        loot = random.choice(available_items)
+        game_state[3].append(loot)
+        print(loot)
+        # for random_loot in available_items:
+        #     game_state[3].append(random_loot)
+        #     current_location_proprieties['items'].remove(random_loot)
+        # if item_name in available_items:
+        #     game_state[3].append(item_name)
+        #     current_location_proprieties['items'].remove(item_name)
+        #     print(f"You're found the AMAAAAAAZINGGG {item_name}")
 
 
 
 # Morning task
 def check_win_condition(game_state):
     # Check if player has collected the treasure
-    treasure_chest_in_inventory = 'treasure_chest' in game_state[3]
+    treasure_chest_in_inventory = 'Treasure Chest you finished the game you are the GOAT of all fishermans' in game_state[3]
     return treasure_chest_in_inventory
 
 
@@ -84,9 +92,9 @@ def display_stats(game_state):
     pass
 
 
-def show_inventory(player_inventory):
-    inventory = list(player_inventory)
-    print(f"You're opening you're backpack... {inventory}")
+def show_diary(player_inventory):
+    diary = list(player_inventory)
+    print(f"You're opening you're fishing diary {diary}")
 
 def random_event(game_state):
     # To be implemented
@@ -108,7 +116,7 @@ def show_help():
     """Display available commands"""
     print("\n=== AVAILABLE COMMANDS ===")
     print("go <direction>     - Move in a direction (north, south, east, west)")
-    print("take <item>        - Pick up an item")
+    print("fishing        - Show us your talent")
     print("use <item>         - Use an item from your inventory")
     print("inventory          - Show your items")
     print("look               - Look around current location")
@@ -127,12 +135,12 @@ def process_command(command, game_state):
    
     if action == 'go' and len(parts) > 1:
         move_player(parts[1], game_state)
-    elif action == 'take' and len(parts) > 1:
-        take_item(parts[1], game_state)
+    elif action == 'fishing':
+        fishing(game_state)
     elif action == 'use' and len(parts) > 1:
         use_item(parts[1], game_state)
-    elif action == 'inventory':
-        show_inventory(game_state[3])
+    elif action == 'diary':
+        show_diary(game_state[3])
     elif action == 'look':
         display_location(game_state[0])
     elif action == 'stats':
@@ -149,7 +157,7 @@ def process_command(command, game_state):
 def main():
    
     # Player state
-    player_location = 'forest'
+    player_location = 'Beginner river'
     player_inventory = []
     player_health = 100
     player_score = 0
@@ -181,7 +189,7 @@ def main():
     print("\n" + "="*50)
     if game_win:
         print("🎉 CONGRATULATIONS! YOU WON! 🎉")
-        print("You found the treasure and completed your adventure!")
+        print("You beacame the best and completed your adventure!")
     elif game_lose:
         print("💀 GAME OVER 💀")
         print("Your health reached zero. Better luck next time!")
