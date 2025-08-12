@@ -6,7 +6,7 @@ rooms = {
     'Beginner river': {
         'description': 'The river near the Town of the promisings fishermans',
         'exits': {'north': 'Cave lake', 'east': 'village', 'south': 'lake'},
-        'items': ['Normal Fish ! Continue like that !', 'Nothing... try again','A rock... Useless','Normal Fish ! Continue like that !', 'Nothing... try again','A rock... Useless','A old paper with "Hidden in the south..." ']
+        'items': ['Normal Fish ! Continue like that !' , 'Nothing... try again','A rock... Useless','Normal Fish ! Continue like that !', 'Nothing... try again','A rock... Useless','A old paper with "Hidden in the south..." ']
     },
     'Cave lake': {
         'description': 'A cave with a lake inside , you feel a mysterious athmosphere ',
@@ -58,7 +58,6 @@ def move_player(direction, game_state):
     if direction in available_directions:
         game_state[0] = current_location_proprieties['exits'][direction]
         print(f"You're going to the {direction}")
-    # To be implemented
 
 
 # Morning task
@@ -69,15 +68,8 @@ def fishing(game_state):
         available_items = current_location_proprieties['items']
         loot = random.choice(available_items)
         game_state[3].append(loot)
+        game_state[5] -= random.randint(1,15) 
         print(loot)
-        # for random_loot in available_items:
-        #     game_state[3].append(random_loot)
-        #     current_location_proprieties['items'].remove(random_loot)
-        # if item_name in available_items:
-        #     game_state[3].append(item_name)
-        #     current_location_proprieties['items'].remove(item_name)
-        #     print(f"You're found the AMAAAAAAZINGGG {item_name}")
-
 
 
 # Morning task
@@ -88,9 +80,30 @@ def check_win_condition(game_state):
 
 
 def display_stats(game_state):
-    # To be implemented
+    position = game_state[0]
+    items = game_state[3]
+    sleep = game_state[5]
+
+    if sleep <= 10:
+        sleep = "zzzzzzz was i sleeping ?"
+    elif sleep <= 20:
+        sleep = "I'm a so tired...."
+    elif sleep <=30:
+        sleep="i'm sleepy... maybe i should sleep ?..."
+    elif sleep <= 50:
+        sleep = "its okahy i can still go for more !"
+    elif sleep <=80:
+        sleep="i'm good"
+    else:
+        sleep="I'm full of energy"
+    print(f"Actual location {position}",f"Players items : {items}",f"energy : {sleep}",sep=".\n") 
+
     pass
 
+def sleep(game_state):
+    game_state[5] = 100
+    print("ZzZZzzzzzzzZZz...")
+    
 
 def show_diary(player_inventory):
     diary = list(player_inventory)
@@ -108,8 +121,8 @@ def use_item(item_name, game_state):
 
 
 def check_lose_condition(game_state):
-    # To be implemented
-    pass
+    if game_state[5] <= 0:
+        return game_state[5]
 
 
 def show_help():
@@ -117,7 +130,6 @@ def show_help():
     print("\n=== AVAILABLE COMMANDS ===")
     print("go <direction>     - Move in a direction (north, south, east, west)")
     print("fishing        - Show us your talent")
-    print("use <item>         - Use an item from your inventory")
     print("inventory          - Show your items")
     print("look               - Look around current location")
     print("stats              - Check your stats")
@@ -137,14 +149,14 @@ def process_command(command, game_state):
         move_player(parts[1], game_state)
     elif action == 'fishing':
         fishing(game_state)
-    elif action == 'use' and len(parts) > 1:
-        use_item(parts[1], game_state)
     elif action == 'diary':
         show_diary(game_state[3])
     elif action == 'look':
         display_location(game_state[0])
     elif action == 'stats':
-        print("To be implemented")
+        display_stats(game_state)
+    elif action == 'sleep':
+        sleep(game_state)
     elif action == 'help':
         show_help()
     elif action == 'quit':
@@ -158,13 +170,14 @@ def main():
    
     # Player state
     player_location = 'Beginner river'
+    player_score = 0
     player_inventory = []
     player_health = 100
-    player_score = 0
+    player_sleep = 100
     game_win = False
     game_lose = False
     game_quit = False
-    current_game_state = [player_location, player_health, player_score, player_inventory, game_quit]
+    current_game_state = [player_location, player_health, player_score, player_inventory, game_quit, player_sleep]
    
     print("="*60)
     print("         WELCOME TO THE ADVENTURE GAME!")
@@ -180,7 +193,7 @@ def main():
        
         # Check win conditions
         game_win = check_win_condition(current_game_state)
-       
+        game_lose = check_lose_condition(current_game_state)
         game_quit = current_game_state[4]
         if game_quit:
             break
@@ -192,9 +205,9 @@ def main():
         print("You beacame the best and completed your adventure!")
     elif game_lose:
         print("💀 GAME OVER 💀")
-        print("Your health reached zero. Better luck next time!")
+        print("Your OVERWORKED yourself....")
    
-    print(f"\nFinal Score: {player_score}")
+    print(f"\nFinal Score: ???")
     print(f"Items Collected: {len(player_inventory)}")
     print("="*50)
 
