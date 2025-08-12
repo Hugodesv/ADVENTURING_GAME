@@ -129,8 +129,9 @@ def show_help():
     """Display available commands"""
     print("\n=== AVAILABLE COMMANDS ===")
     print("go <direction>     - Move in a direction (north, south, east, west)")
-    print("fishing        - Show us your talent")
-    print("inventory          - Show your items")
+    print("fishing            - Show us your talent")
+    print("diary              - Show your items")
+    print("sleep              - Recover your energy !")
     print("look               - Look around current location")
     print("stats              - Check your stats")
     print("help               - Show this help message")
